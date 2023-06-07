@@ -26,7 +26,15 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($request->except(['_token']))) {
-            return  redirect()->route('dashboard');
+            $user_type = Auth::user()->user_type;
+            if(strtolower($user_type) == 'admin'){
+                return  redirect()->route('dashboard');
+            } elseif(strtolower($user_type) == 'student'){
+                return  redirect()->route('student.dashboard');
+            } else{
+                Auth::logout();
+            return redirect()->route('login')->with('error', 'Han bhai kidr');
+            }
         } else {
             return redirect()->route('login')->with('error', 'Invalid Combination');
         }
@@ -86,10 +94,6 @@ class AuthController extends Controller
 
         }
     }
-
-
-
-
 
     public function logout()
     {
