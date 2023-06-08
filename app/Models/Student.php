@@ -28,8 +28,13 @@ class Student extends Model
     }
 
 
-    public function attendences()
+    public function attendence()
     {
         return $this->hasMany(Attendence::class);
+    }
+
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class);
     }
 }

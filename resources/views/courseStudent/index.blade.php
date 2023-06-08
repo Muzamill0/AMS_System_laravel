@@ -37,6 +37,7 @@
                                             <td>{{ $student->user->email }}</td>
                                             <td>{{ $student->reg_no }}</td>
                                             <td>
+                                                <a href="{{ route('single.student.attendance', $student) }}" class="btn btn-primary">Single Student</a>
                                             </td>
                                         </tr>
                                     @endforeach

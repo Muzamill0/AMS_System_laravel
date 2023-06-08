@@ -23,4 +23,9 @@ class Attendance extends Model
     public function course(){
         return $this->belongsTo(Course::class);
     }
+
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class);
+    }
 }

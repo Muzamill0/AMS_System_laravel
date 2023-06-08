@@ -40,73 +40,73 @@ class StudentController extends Controller
             'email' => ['required', 'unique:users,email'],
         ]);
 
-        if($request->password){
+        if ($request->password) {
             $password = Hash::make($request->password);
-        } else{
+        } else {
             $password = Hash::make(12345);
         }
 
-        if($request->user_type == 'Admin'){
+        if ($request->user_type == 'Admin') {
             $user_type = 'Admin';
-        } else{
-            $user_type = 'Student';
-        }
-
-        if (!empty($request->phone)) {
-            $request->validate([
-                'phone' => ['unique:users,contact_no']
-            ]);
-        }
-
-        if (!empty($request->picture)) {
-            $request->validate([
-                'picture' => ['mimes:png,jpg,jpeg']
-            ]);
-
-            $file = $request['picture'];
-            $file_name = 'image-' . time() . '-' . $file->getClientOriginalName();
         } else {
-            $file_name = 'avatar.png';
-        }
+            $user_type = 'Student';
 
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'contact_no' => $request->phone,
-            'password' => $password,
-            'image' => $file_name,
-            'dob' => $request->dob,
-            'address' => $request->address,
-            'user_type' => $user_type,
-        ];
-        // dd($data);
-
-        $is_user_created = User::create($data);
-
-        if ($is_user_created) {
-            $file = $request['picture'];
-
-            if ($file) {
-                $is_file_uploaded = $file->move(public_path('student_uploads'), $file_name);
+            if (!empty($request->phone)) {
+                $request->validate([
+                    'phone' => ['unique:users,contact_no']
+                ]);
             }
 
-            $reg_no = ' reg-'. $request->name . $is_user_created->id;
+            if (!empty($request->picture)) {
+                $request->validate([
+                    'picture' => ['mimes:png,jpg,jpeg']
+                ]);
+
+                $file = $request['picture'];
+                $file_name = 'image-' . time() . '-' . $file->getClientOriginalName();
+            } else {
+                $file_name = 'avatar.png';
+            }
 
             $data = [
-                'user_id' => $is_user_created->id,
-                'course_id' => $request->course,
-                'reg_no' => $reg_no
+                'name' => $request->name,
+                'email' => $request->email,
+                'contact_no' => $request->phone,
+                'password' => $password,
+                'image' => $file_name,
+                'dob' => $request->dob,
+                'address' => $request->address,
+                'user_type' => $user_type,
             ];
+            // dd($data);
 
-            $is_student_created = Student::create($data);
+            $is_user_created = User::create($data);
 
-            if ($is_student_created) {
-                return back()->with('success', 'student has registered successfully');
+            if ($is_user_created) {
+                $file = $request['picture'];
+
+                if ($file) {
+                    $is_file_uploaded = $file->move(public_path('student_uploads'), $file_name);
+                }
+
+                $reg_no = ' reg-' . $request->name . $is_user_created->id;
+
+                $data = [
+                    'user_id' => $is_user_created->id,
+                    'course_id' => $request->course,
+                    'reg_no' => $reg_no
+                ];
+
+                $is_student_created = Student::create($data);
+
+                if ($is_student_created) {
+                    return back()->with('success', 'student has registered successfully');
+                } else {
+                    return back()->with('error', 'student has failed to register!');
+                }
             } else {
-                return back()->with('error', 'student has failed to register!');
+                return back()->with('error', 'user has failed to create');
             }
-        } else {
-            return back()->with('error', 'user has failed to create');
         }
     }
     public function show(Student $student)
@@ -128,7 +128,7 @@ class StudentController extends Controller
             'student' => $student,
             'courses' => Course::all()
         ];
-        return view('students.edit',$data);
+        return view('students.edit', $data);
     }
 
     public function update(Request $request, Student $student)
@@ -137,24 +137,24 @@ class StudentController extends Controller
 
         $request->validate([
             'name' => ['required'],
-            'email' => ['required', 'unique:users,email,'. $student->user->id . ',id' ],
+            'email' => ['required', 'unique:users,email,' . $student->user->id . ',id'],
         ]);
 
-        if($request->password){
+        if ($request->password) {
             $password = Hash::make($request->password);
-        } else{
+        } else {
             $password = Hash::make(12345);
         }
 
-        if($request->user_type == 'Admin'){
+        if ($request->user_type == 'Admin') {
             $user_type = 'Admin';
-        } else{
+        } else {
             $user_type = 'Student';
         }
 
         if (!empty($request->phone)) {
             $request->validate([
-                'phone' => ['unique:users,contact_no,'. $student->user->id . ',id' ]
+                'phone' => ['unique:users,contact_no,' . $student->user->id . ',id']
             ]);
         }
 
@@ -190,7 +190,7 @@ class StudentController extends Controller
                 $file->move(public_path('student_uploads'), $file_name);
             }
 
-            $reg_no = ' reg'. $request->name . $student->user->id;
+            $reg_no = ' reg' . $request->name . $student->user->id;
 
             $data = [
                 'user_id' => $student->user->id,

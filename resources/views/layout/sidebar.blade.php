@@ -46,7 +46,7 @@
               <i class="menu-arrow"></i>
             </a>
 
-                @if($courses)
+                @if(auth()->user()->user_type == 'Admin')
                     @foreach ($courses as $course)
                     <div class="collapse" id="auth">
                         <ul class="nav flex-column sub-menu">
@@ -57,11 +57,11 @@
             </div>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="{{ route('leaves') }}">
               <span class="menu-icon">
                 <i class="mdi mdi-file-document-box"></i>
               </span>
-              <span class="menu-title">Attendence</span>
+              <span class="menu-title">Leave Requests</span>
             </a>
           </li>
         </ul>

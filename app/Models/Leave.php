@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Attendance;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Leave extends Model
 {
@@ -11,7 +12,15 @@ class Leave extends Model
 
     protected $fillable = [
         'student_id',
-        'leave_rquest',
-        'reason'
+        'attendance_id',
+        'leave_request',
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+    public function attendance(){
+        return $this->belongsTo(Attendance::class);
+    }
 }

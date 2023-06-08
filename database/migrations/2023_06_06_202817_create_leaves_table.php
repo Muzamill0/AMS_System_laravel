@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('leaves', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->references('id')->on('students')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('attendance_id')->references('id')->on('attendances')->onDelete('cascade')->onUpdate('cascade');
             $table->boolean('leave_request');
-            $table->string('reason');
             $table->timestamps();
         });
     }
